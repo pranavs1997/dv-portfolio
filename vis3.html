@@ -14,34 +14,30 @@
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     	<script type="text/javascript">
       		google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawSheetName);
-    function drawSheetName() {
-      var queryString = encodeURIComponent("SELECT A, SUM(D) WHERE A MATCHES 'Afghanistan' OR A MATCHES 'Bangladesh' OR A MATCHES 'Bhutan' OR A MATCHES 'India' OR A MATCHES 'Iran' OR A MATCHES 'Sri Lanka' OR A MATCHES 'Maldives' OR A MATCHES 'Nepal' OR A MATCHES 'Pakistan' GROUP BY A");
-
-      var query = new google.visualization.Query(
-          'https://docs.google.com/spreadsheets/d/1DyjeqGEF8Z7fehXbpCUJutB4VQd1OEW_pF-Ii2J_NJw/gviz/tq?tq=' + queryString);
-      query.send(handleSampleDataQueryResponse);
-    }
-
-    function handleSampleDataQueryResponse(response) {
-      if (response.isError()) {
-        alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
-        return;
-      }
-
-      var data = response.getDataTable();
-      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-
-      chart.draw(data, {
-        height: 400,
-        hAxis: {
-          slantedText: true,
-          slantedTextAngle: 45
-        },
-        bar: { groupWidth: '90%' } // Adjust this value as needed
-      });
-    }
-    </script>
+    		google.charts.setOnLoadCallback(drawSheetName);
+    		function drawSheetName() {
+      			var queryString = encodeURIComponent("SELECT A, SUM(D) WHERE A MATCHES 'Afghanistan' OR A MATCHES 'Bangladesh' OR A MATCHES 'Bhutan' OR A MATCHES 'India' OR A MATCHES 'Iran' OR A MATCHES 'Sri Lanka' OR A MATCHES 'Maldives' OR A MATCHES 'Nepal' OR A MATCHES 'Pakistan' GROUP BY A");
+      			var query = new google.visualization.Query(
+          			'https://docs.google.com/spreadsheets/d/1DyjeqGEF8Z7fehXbpCUJutB4VQd1OEW_pF-Ii2J_NJw/gviz/tq?tq=' + queryString);
+      				query.send(handleSampleDataQueryResponse);
+    		}
+    		function handleSampleDataQueryResponse(response) {
+      			if (response.isError()) {
+        			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+        		return;
+      			}
+      			var data = response.getDataTable();
+      			var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+				chart.draw(data, {
+					height: 400,
+					hAxis: {
+					slantedText: true,
+					slantedTextAngle: 45
+					},
+					bar: { groupWidth: '90%' } // Adjust this value as needed
+				});
+    		}
+    	</script>
 	</head>
 	<body class="is-preload">
 		<!-- Wrapper -->
