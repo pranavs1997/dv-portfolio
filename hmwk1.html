@@ -104,6 +104,7 @@
 			chart.draw(data, options);
 		  }
 
+		  // Function to draw the AreaChart
 		  function drawChart() {
 			var queryString = encodeURIComponent("SELECT A, C, D WHERE A MATCHES 'Afghanistan' OR A MATCHES 'Bangladesh' OR A MATCHES 'Bhutan' OR A MATCHES 'India' OR A MATCHES 'Iran' OR A MATCHES 'Sri Lanka' OR A MATCHES 'Maldives' OR A MATCHES 'Nepal' OR A MATCHES 'Pakistan'");
 			var query = new google.visualization.Query(
@@ -111,6 +112,7 @@
 			query.send(handleSampleDataQueryResponse_4);
 			}
 
+			// Handle the response for the AreaChart
 			function handleSampleDataQueryResponse_4(response) {
 				if (response.isError()) {
 				alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
