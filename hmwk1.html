@@ -23,7 +23,36 @@
 		  google.charts.setOnLoadCallback(drawRegionsMap);
 		  google.charts.setOnLoadCallback(drawPieChart);
 		  google.charts.setOnLoadCallback(drawColumnChart);
+		  google.charts.setOnLoadCallback(drawChart);
+
+		  // Function to draw the ColumnChart
+		  function drawColumnChart() {
+			var queryString = encodeURIComponent("SELECT A, SUM(D) WHERE A MATCHES 'Afghanistan' OR A MATCHES 'Bangladesh' OR A MATCHES 'Bhutan' OR A MATCHES 'India' OR A MATCHES 'Iran' OR A MATCHES 'Sri Lanka' OR A MATCHES 'Maldives' OR A MATCHES 'Nepal' OR A MATCHES 'Pakistan' GROUP BY A ORDER BY SUM(D) DESC");
+			var query = new google.visualization.Query(
+			  'https://docs.google.com/spreadsheets/d/1DyjeqGEF8Z7fehXbpCUJutB4VQd1OEW_pF-Ii2J_NJw/gviz/tq?tq=' + queryString
+			);
+			query.send(handleSampleDataQueryResponse_3);
+		  }
 	
+		  // Handle the response for the ColumnChart
+		  function handleSampleDataQueryResponse_3(response) {
+			if (response.isError()) {
+			  console.error('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+			  alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+			  return;
+			}
+			var data = response.getDataTable();
+			var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+			chart.draw(data, {
+			  height: 400,
+			  hAxis: {
+				slantedText: true,
+				slantedTextAngle: 45
+			  },
+			  bar: { groupWidth: '90%' }, title: 'Deaths due to war conflicts in the Sub-Continent of Southern Asia for the years 1989-2022', // Adjust this value as needed
+			});
+		  }	
+
 		  // Function to draw the GeoChart
 		  function drawRegionsMap() {
 			var queryString = encodeURIComponent("SELECT A, SUM(D) GROUP BY A");
@@ -74,34 +103,30 @@
 			var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
 			chart.draw(data, options);
 		  }
-	
-		  // Function to draw the ColumnChart
-		  function drawColumnChart() {
-			var queryString = encodeURIComponent("SELECT A, SUM(D) WHERE A MATCHES 'Afghanistan' OR A MATCHES 'Bangladesh' OR A MATCHES 'Bhutan' OR A MATCHES 'India' OR A MATCHES 'Iran' OR A MATCHES 'Sri Lanka' OR A MATCHES 'Maldives' OR A MATCHES 'Nepal' OR A MATCHES 'Pakistan' GROUP BY A ORDER BY SUM(D) DESC");
+
+		  function drawChart() {
+			var queryString = encodeURIComponent("SELECT A, C, D WHERE A MATCHES 'Afghanistan' OR A MATCHES 'Bangladesh' OR A MATCHES 'Bhutan' OR A MATCHES 'India' OR A MATCHES 'Iran' OR A MATCHES 'Sri Lanka' OR A MATCHES 'Maldives' OR A MATCHES 'Nepal' OR A MATCHES 'Pakistan'");
 			var query = new google.visualization.Query(
-			  'https://docs.google.com/spreadsheets/d/1DyjeqGEF8Z7fehXbpCUJutB4VQd1OEW_pF-Ii2J_NJw/gviz/tq?tq=' + queryString
-			);
+			'https://docs.google.com/spreadsheets/d/1DyjeqGEF8Z7fehXbpCUJutB4VQd1OEW_pF-Ii2J_NJw/gviz/tq?tq=' + queryString);
 			query.send(handleSampleDataQueryResponse_3);
-		  }
-	
-		  // Handle the response for the ColumnChart
-		  function handleSampleDataQueryResponse_3(response) {
-			if (response.isError()) {
-			  console.error('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
-			  alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
-			  return;
 			}
-			var data = response.getDataTable();
-			var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-			chart.draw(data, {
-			  height: 400,
-			  hAxis: {
-				slantedText: true,
-				slantedTextAngle: 45
-			  },
-			  bar: { groupWidth: '90%' }, title: 'Deaths due to war conflicts in the Sub-Continent of Southern Asia for the years 1989-2022', // Adjust this value as needed
-			});
-		  }
+
+			function handleSampleDataQueryResponse_3(response) {
+				if (response.isError()) {
+				alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+				return;
+				}
+				var data = response.getDataTable();
+				
+				var options = {
+				title: 'Deaths due to war conflicts in the Sub-Continent of Southern Asia along the years 1989-2022',
+				hAxis: {title: 'Year',  titleTextStyle: {color: '#333'}},
+				vAxis: {minValue: 0}
+				};
+
+				var chart = new google.visualization.AreaChart(document.getElementById('areachart_div'));
+				chart.draw(data, options);
+			}
 		</script>
 	</head>
 	<body class="is-preload">
@@ -152,7 +177,9 @@
 
 							<div id="chart_div" style="width: 900px; height: 500px;"></div>
 							<p>A column chart is a vertical bar chart. Each column represents the total deaths for a specific country, making it easy to discern which countries have higher or lower death counts. A Column Chart naturally facilitates ranking, as viewers can see which countries have the highest and lowest death counts by comparing the heights of the columns. Column Charts are widely used and familiar to most people, making them easy to interpret for a broad audience. Viewers can quickly understand the relationship between countries and total deaths without needing specialized knowledge or training. All this makes it effective for identifying top contributors or outliers in the data set. Its effective in comparing magnitudes, showing temporal trends, and facilitating ranking. </p>
-
+							
+							<div id="areachart_div" style="width: 900px; height: 500px;"></div>
+							<p>A column chart is a vertical bar chart. Each column represents the total deaths for a specific country, making it easy to discern which countries have higher or lower death counts. A Column Chart naturally facilitates ranking, as viewers can see which countries have the highest and lowest death counts by comparing the heights of the columns. Column Charts are widely used and familiar to most people, making them easy to interpret for a broad audience. Viewers can quickly understand the relationship between countries and total deaths without needing specialized knowledge or training. All this makes it effective for identifying top contributors or outliers in the data set. Its effective in comparing magnitudes, showing temporal trends, and facilitating ranking. </p>
 						</div>
 					</div>
 
