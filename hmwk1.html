@@ -42,7 +42,7 @@
 			}
 			var data = response.getDataTable();
 			var options = {
-			  title: 'Deaths due to war conflicts in the Sub-Continent of Southern Asia',
+			  title: 'Deaths due to war conflicts in the Sub-Continent of Southern Asia for the years 1989-2022',
 			  backgroundColor: '#81d4fa',
 			  colorAxis: { colors: ['#d8f8d8', '#04e404'] },
 			  region: '034'
@@ -68,7 +68,7 @@
 			  return;
 			}
 			var options = {
-			  title: 'Deaths due to war conflicts in the Sub-Continent of Southern Asia',
+			  title: 'Deaths due to war conflicts in the Sub-Continent of Southern Asia for the years 1989-2022',
 			  is3D: true,
 			};
 			var data = response.getDataTable();
@@ -78,7 +78,7 @@
 	
 		  // Function to draw the ColumnChart
 		  function drawColumnChart() {
-			var queryString = encodeURIComponent("SELECT A, SUM(D) WHERE A MATCHES 'Afghanistan' OR A MATCHES 'Bangladesh' OR A MATCHES 'Bhutan' OR A MATCHES 'India' OR A MATCHES 'Iran' OR A MATCHES 'Sri Lanka' OR A MATCHES 'Maldives' OR A MATCHES 'Nepal' OR A MATCHES 'Pakistan' GROUP BY A");
+			var queryString = encodeURIComponent("SELECT A, SUM(D) WHERE A MATCHES 'Afghanistan' OR A MATCHES 'Bangladesh' OR A MATCHES 'Bhutan' OR A MATCHES 'India' OR A MATCHES 'Iran' OR A MATCHES 'Sri Lanka' OR A MATCHES 'Maldives' OR A MATCHES 'Nepal' OR A MATCHES 'Pakistan' GROUP BY A ORDER BY SUM(D) DESC");
 			var query = new google.visualization.Query(
 			  'https://docs.google.com/spreadsheets/d/1DyjeqGEF8Z7fehXbpCUJutB4VQd1OEW_pF-Ii2J_NJw/gviz/tq?tq=' + queryString
 			);
@@ -152,7 +152,7 @@
 							<p>A pie chart is a type of graph representing data in a circular form, with each slice of the circle representing a fraction or proportionate part of the whole. All slices of the pie add up to make the whole equaling 100 percent and 360 degrees. Each slice of the pie represents a country's proportion of total deaths, allowing viewers to compare the relative importance of each country at a glance. With a limited number of categories (countries in this case), a Pie Chart can provide a clear and straightforward representation of the data without overwhelming the audience with too much information. Large slices (representing high deaths) or small slices (representing low deaths) can draw viewers' attention to countries of particular interest. </p>
 
 							<div id="chart_div" style="width: 900px; height: 500px;"></div>
-							<p>A column chart is a vertical bar chart. Each column represents the total deaths for a specific country, making it easy to discern which countries have higher or lower death counts. Its effective in comparing magnitudes, showing temporal trends, and facilitating ranking. </p>
+							<p>A column chart is a vertical bar chart. Each column represents the total deaths for a specific country, making it easy to discern which countries have higher or lower death counts. A Column Chart naturally facilitates ranking, as viewers can see which countries have the highest and lowest death counts by comparing the heights of the columns. Column Charts are widely used and familiar to most people, making them easy to interpret for a broad audience. Viewers can quickly understand the relationship between countries and total deaths without needing specialized knowledge or training. All this makes it effective for identifying top contributors or outliers in the data set. Its effective in comparing magnitudes, showing temporal trends, and facilitating ranking. </p>
 
 						</div>
 					</div>
