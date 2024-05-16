@@ -1,0 +1,198 @@
+<!DOCTYPE HTML>
+<!--
+	Phantom by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Generic - Phantom by HTML5 UP</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+		<!-- Visualization 1 -->
+		<script type="text/javascript">
+			google.charts.load('current', {
+				'packages': ['geochart'],
+		    	});
+		    	google.charts.setOnLoadCallback(drawRegionsMap);
+		    	function drawRegionsMap() {
+				var queryString = encodeURIComponent("SELECT A, SUM(D) GROUP BY A");
+		      		var query = new google.visualization.Query(
+		        	'https://docs.google.com/spreadsheets/d/1DyjeqGEF8Z7fehXbpCUJutB4VQd1OEW_pF-Ii2J_NJw/gviz/tq?tq=' + queryString);
+		      		query.send(handleSampleDataQueryResponse);
+		    	}
+		    	function handleSampleDataQueryResponse(response) {
+		      		if (response.isError()) {
+		        		alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+		        	return;
+		      	}
+		      	var data = response.getDataTable();
+		      	var options = {
+		        backgroundColor: '#81d4fa',
+		        colorAxis: { colors: ['#d8f8d8', '#04e404'] },
+		        region: '034'
+		      	};
+		      	var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+		      	chart.draw(data, options);
+		    	}
+		</script>
+		<!-- Visualization 2 -->
+		<script type="text/javascript">
+			google.charts.load("current", {packages:["corechart"]});
+			google.charts.setOnLoadCallback(drawChart);
+			function drawChart() {
+			  var queryString = encodeURIComponent("SELECT A, SUM(D) WHERE A MATCHES 'Afghanistan' OR A MATCHES 'Bangladesh' OR A MATCHES 'Bhutan' OR A MATCHES 'India' OR A MATCHES 'Iran' OR A MATCHES 'Sri Lanka' OR A MATCHES 'Maldives' OR A MATCHES 'Nepal' OR A MATCHES 'Pakistan' GROUP BY A");
+			  var query = new google.visualization.Query(
+				  'https://docs.google.com/spreadsheets/d/1DyjeqGEF8Z7fehXbpCUJutB4VQd1OEW_pF-Ii2J_NJw/gviz/tq?tq=' + queryString);
+				  query.send(handleSampleDataQueryResponse);
+		  }
+
+		  function handleSampleDataQueryResponse(response) {
+				if (response.isError()) {
+				  alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+			  return;
+			}
+		  var options = {
+				title: 'Hello',
+				is3D: true,
+		  };
+		  var data = response.getDataTable();
+		  var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+		  chart.draw(data, options);
+			}
+	  	</script>
+		<!-- Visualization 3 -->
+		<script type="text/javascript">
+			google.charts.load('current', {'packages':['corechart']});
+		  google.charts.setOnLoadCallback(drawSheetName);
+		  function drawSheetName() {
+				var queryString = encodeURIComponent("SELECT A, SUM(D) WHERE A MATCHES 'Afghanistan' OR A MATCHES 'Bangladesh' OR A MATCHES 'Bhutan' OR A MATCHES 'India' OR A MATCHES 'Iran' OR A MATCHES 'Sri Lanka' OR A MATCHES 'Maldives' OR A MATCHES 'Nepal' OR A MATCHES 'Pakistan' GROUP BY A");
+				var query = new google.visualization.Query(
+					'https://docs.google.com/spreadsheets/d/1DyjeqGEF8Z7fehXbpCUJutB4VQd1OEW_pF-Ii2J_NJw/gviz/tq?tq=' + queryString);
+					query.send(handleSampleDataQueryResponse);
+		  }
+		  function handleSampleDataQueryResponse(response) {
+				if (response.isError()) {
+				  alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+			  return;
+				}
+				var data = response.getDataTable();
+				var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+			  chart.draw(data, {
+				  height: 400,
+				  hAxis: {
+				  slantedText: true,
+				  slantedTextAngle: 45
+				  },
+				  bar: { groupWidth: '90%' } // Adjust this value as needed
+			  });
+		  }
+	  	</script>
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+
+							<!-- Logo -->
+								<a href="index.html" class="logo">
+									<span class="symbol"><img src="images/logo.svg" alt="" /></span><span class="title">Phantom</span>
+								</a>
+
+							<!-- Nav -->
+								<nav>
+									<ul>
+										<li><a href="#menu">Menu</a></li>
+									</ul>
+								</nav>
+
+						</div>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="generic.html">Ipsum veroeros</a></li>
+							<li><a href="generic.html">Tempus etiam</a></li>
+							<li><a href="generic.html">Consequat dolor</a></li>
+							<li><a href="elements.html">Elements</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+							<h1>Generic Page</h1>
+<!-- 							<span class="image main"><img src="images/pic13.jpg" alt="" /></span> -->
+							<div id="regions_div" style="width: 900px; height: 500px;"></div>
+							<p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fergiat. Pellentesque in mi eu massa lacinia malesuada et a elit. Donec urna ex, lacinia in purus ac, pretium pulvinar mauris. Curabitur sapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit tristique.</p>
+							
+							<div id="piechart_3d" style="width: 900px; height: 500px;"></div>
+							<p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fergiat. Pellentesque in mi eu massa lacinia malesuada et a elit. Donec urna ex, lacinia in purus ac, pretium pulvinar mauris. Curabitur sapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit tristique.</p>
+
+							<div id="chart_div" style="width: 900px; height: 500px;"></div>
+							<p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fergiat. Pellentesque in mi eu massa lacinia malesuada et a elit. Donec urna ex, lacinia in purus ac, pretium pulvinar mauris. Curabitur sapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit tristique.</p>
+
+						</div>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<section>
+								<h2>Get in touch</h2>
+								<form method="post" action="#">
+									<div class="fields">
+										<div class="field half">
+											<input type="text" name="name" id="name" placeholder="Name" />
+										</div>
+										<div class="field half">
+											<input type="email" name="email" id="email" placeholder="Email" />
+										</div>
+										<div class="field">
+											<textarea name="message" id="message" placeholder="Message"></textarea>
+										</div>
+									</div>
+									<ul class="actions">
+										<li><input type="submit" value="Send" class="primary" /></li>
+									</ul>
+								</form>
+							</section>
+							<section>
+								<h2>Follow</h2>
+								<ul class="icons">
+									<li><a href="#" class="icon brands style2 fa-twitter"><span class="label">Twitter</span></a></li>
+									<li><a href="#" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a></li>
+									<li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
+									<li><a href="#" class="icon brands style2 fa-dribbble"><span class="label">Dribbble</span></a></li>
+									<li><a href="#" class="icon brands style2 fa-github"><span class="label">GitHub</span></a></li>
+									<li><a href="#" class="icon brands style2 fa-500px"><span class="label">500px</span></a></li>
+									<li><a href="#" class="icon solid style2 fa-phone"><span class="label">Phone</span></a></li>
+									<li><a href="#" class="icon solid style2 fa-envelope"><span class="label">Email</span></a></li>
+								</ul>
+							</section>
+							<ul class="copyright">
+								<li>&copy; Untitled. All rights reserved</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
