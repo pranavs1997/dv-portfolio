@@ -16,6 +16,15 @@
         margin-right: 5px;
       }
     </style>
+    <style>
+        ul.indented-list {
+          padding-left: 40px; /* Adjust as needed */
+        }
+        
+        ul.indented-list li {
+          margin-bottom: 5px; /* Optional: adds space between bullet points */
+        }
+    </style>
   </head>
   <body class="is-preload">
     <!-- Wrapper -->
@@ -57,10 +66,18 @@
                     <div class="inner">
                         <h1>Homework 2</h1>
                         <h2>A real problematic visualization </h2>
+                        <p>As shown below, here's an ugly visualization from r/dataisugly. <a href="https://www.reddit.com/r/dataisugly/comments/1cf53yp/number_of_indian_grandmasters/" target="_blank"></a> </p>
                         <div id="imageContainer">
                             <img src="images/gkwb9jdra7xc1.png" alt="Image Description">
                         </div>
-                        <p>Here's an ugly visualization. </p>
+                        <p>It's trying to visualize the number of Indian Grandmasters over a period from 1987 to 2023. A Grandmaster (GM) in chess is the highest title awarded by the International Chess Federation (FIDE), the game's global governing body. 
+                            It is a lifetime title, meaning it does not need to be renewed and is valid for the player's lifetime. To become a Grandmaster, a player typically needs to achieve a FIDE rating of at least 2500 at some point in their career.
+                            However, the line plot does not do a very good job at visualizing the data. Visualizing the trend of the number of Indian Grandmasters (GMs) from 1987 to 2023 can indeed be challenging with a line plot, especially if the data points are sparse or if the increases in numbers are not uniform year over year. </p>
+                            <ul class="indented-list">
+                                <li>Discrete Data: The count of Grandmasters per year is discrete data, not continuous. Line plots are more suitable for continuous data where values between the points are meaningful.</li>
+                                <li>Sparsity and Clusters: If the data has years with no new Grandmasters followed by bursts of multiple Grandmasters in other years, a line plot might not effectively communicate this pattern. The line might appear jagged and fail to show the significance of clusters.</li>
+                                <li>Misleading Trends: The line connecting data points might suggest trends that don't exist or obscure important details, such as significant years where multiple Grandmasters were awarded.</li>
+                            </ul>
 
                         <h2>Vega</h2>
                         <!-- Container for the visualization -->
