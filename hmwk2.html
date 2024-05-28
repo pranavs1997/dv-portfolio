@@ -102,41 +102,44 @@
                         <script>
                         // Assign the specification to a local variable vlSpec.
                         var vlSpec = {
-                                "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-                                "width": 700,
-                                "height": 300,
-                                "data": {
-                                    "url": "https://raw.githubusercontent.com/pranavs1997/dv-portfolio/main/docs/chess_grandmasters.csv"
-                                },
-                                "transform": [
+                            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+                            "width": 700,
+                            "height": 300,
+                            "data": {
+                                "url": "https://raw.githubusercontent.com/pranavs1997/dv-portfolio/main/docs/chess_grandmasters.csv"
+                            },
+                            "transform": [
+                                {
+                                "aggregate": [
                                     {
-                                    "aggregate": [
-                                        {
-                                        "op": "count",
-                                        "as": "Number of Grandmasters"
-                                        }
-                                    ],
-                                    "groupby": ["Year"]
+                                    "op": "count",
+                                    "as": "Number of Grandmasters"
                                     }
                                 ],
-                                "mark": "bar",
-                                "encoding": {
-                                    "x": {
-                                    "field": "Year",
-                                    "type": "ordinal",
-                                    "timeUnit": "utcyear",
-                                    "title": "Year"
-                                    },
-                                    "y": {
-                                    "field": "Number of Grandmasters",
-                                    "type": "quantitative",
-                                    "title": "Number of Grandmasters"
-                                    },
-                                    "tooltip": [
-                                    {"field": "Number of Grandmasters", "type": "quantitative", "title": "Number of Grandmasters"}
-                                    ]
+                                "groupby": ["Year"]
                                 }
-                                };
+                            ],
+                            "mark": "bar",
+                            "encoding": {
+                                "x": {
+                                "field": "Year",
+                                "type": "ordinal",
+                                "timeUnit": "utcyear",
+                                "title": "Year"
+                                },
+                                "y": {
+                                "field": "Number of Grandmasters",
+                                "type": "quantitative",
+                                "title": "Number of Grandmasters"
+                                },
+                                "tooltip": [
+                                {"field": "Number of Grandmasters", "type": "quantitative", "title": "Number of Grandmasters"}
+                                ]
+                            },
+                            "title": {
+                            "text": "Number of Indian Grandmasters for the years 1987-2023"
+                            }
+                            };
                         // Embed the visualization in the container with id `vis`
                         vegaEmbed('#vis', vlSpec);
                         </script>
