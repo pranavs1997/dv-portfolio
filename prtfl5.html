@@ -9,7 +9,10 @@
     <script src="https://cdn.jsdelivr.net/npm/vega@5.28.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.18.1"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.25.0"></script>
-
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
     <style media="screen">
       /* Add space between Vega-Embed links  */
       .vega-actions a {
@@ -88,112 +91,93 @@
 
                         <h3>Step 1: Install and Import Weights & Biases</h3>
                         <p>Since you are using Google Colab, you can use a cell to run the pip install command directly:</p>
-                        <code>!pip install wandb</code>
+                        <code>!pip install wandb</code><p></p>
                         <p>After installation, you can import wandb in the next cell of your Colab notebook:</p>
-                        <code>import wandb</code>
-
+                        <code>import wandb</code><p></p>
                         <h3>Step 2: Configure Environment Variables for Weights & Biases</h3>
                         <p>Set the WANDB_PROJECT environment variable. This variable specifies the default project name where your experiments will be logged. Also set the WANDB_LOG_MODEL environment variable. This variable enables automatic logging of your models to wandb.</p>
-                        <pre><code>
-                            import os
-                            os.environ["WANDB_PROJECT"] = "exprmt"
-                            os.environ["WANDB_LOG_MODEL"] = "true"
-                        </code></pre>
+                        <pre><code>import os
+os.environ["WANDB_PROJECT"] = "exprmt"
+os.environ["WANDB_LOG_MODEL"] = "true"</code></pre>
 
                         <h3>Step 3: Install datasets and accelerate</h3>
                         <p>Run the following command to install the datasets and accelerate library</p>
-                        <pre><code>
-                            !pip install datasets
-                            !pip install accelerate>=0.21.0
-                        </code></pre>
+                        <pre><code>!pip install datasets
+!pip install accelerate>=0.21.0</code></pre>
 
                         <h3>Step 4: Load the IMDB dataset</h3>
                         <p>blah</p>
-                        <pre><code>
-                            from datasets import load_dataset
-                            datasets = load_dataset("imdb")
-                        </code></pre>
+                        <pre><code>from datasets import load_dataset
+datasets = load_dataset("imdb")</code></pre>
 
                         <h3>Step 5: Create a small dataset</h3>
                         <p>blah</p>
-                        <pre><code>
-                            small_train_dataset = datasets['train'].shuffle(seed=42).select(range(1000))
-                            small_eval_dataset = datasets['test'].shuffle(seed=42).select(range(100))
-                        </code></pre>
+                        <pre><code>small_train_dataset = datasets['train'].shuffle(seed=42).select(range(1000))
+small_eval_dataset = datasets['test'].shuffle(seed=42).select(range(100))</code></pre>
                         
                         <h3>Step 6: Load the DistilBert tokenizer and data collator for tokenizing</h3>
                         <p>blah</p>
-                        <pre><code>
-                            from transformers import DistilBertTokenizer, DataCollatorWithPadding
-                            tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased')
-                            def tokenize_function(examples):
-                                return tokenizer(examples['text'], padding='max_length', truncation=True)
-                            tokenized_train = small_train_dataset.map(tokenize_function, batched=True)
-                            tokenized_eval = small_eval_dataset.map(tokenize_function, batched=True)
-                            data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
-                        </code></pre>
+                        <pre><code>from transformers import DistilBertTokenizer, DataCollatorWithPadding
+tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased')
+def tokenize_function(examples):
+    return tokenizer(examples['text'], padding='max_length', truncation=True)
+tokenized_train = small_train_dataset.map(tokenize_function, batched=True)
+tokenized_eval = small_eval_dataset.map(tokenize_function, batched=True)
+data_collator = DataCollatorWithPadding(tokenizer=tokenizer)</code></pre>
 
                         <h3>Step 7: Create metrics</h3>
                         <p>blah</p>
-                        <pre><code>
-                            # custom compute_metrics function
-                            from sklearn.metrics import precision_recall_fscore_support, accuracy_score
-
-                            # Define the compute_metrics function
-                            def compute_metrics(pred):
-                                labels = pred.label_ids
-                                preds = pred.predictions.argmax(-1)
-                                precision, recall, f1, _ = precision_recall_fscore_support(labels, preds, average='weighted')
-                                acc = accuracy_score(labels, preds)
-                                return {
-                                    'accuracy': acc,
-                                    'precision': precision,
-                                    'recall': recall,
-                                    'f1': f1,
-                                }
-                        </code></pre>
+                        <pre><code>from sklearn.metrics import precision_recall_fscore_support, accuracy_score
+def compute_metrics(pred):
+    labels = pred.label_ids
+    preds = pred.predictions.argmax(-1)
+    precision, recall, f1, _ = precision_recall_fscore_support(labels, preds, average='weighted')
+    acc = accuracy_score(labels, preds)
+    return {
+        'accuracy': acc,
+        'precision': precision,
+        'recall': recall,
+        'f1': f1,
+    }</code></pre>
 
                         <h3>Step 8: Load the model and the trainer</h3>
                         <p>blah</p>
-                        <pre><code>
-                            from transformers import DistilBertForSequenceClassification, Trainer, TrainingArguments
-                            # Define the model and training arguments
-                            model = DistilBertForSequenceClassification.from_pretrained('distilbert-base-uncased', num_labels=2)
-                            experiment_name = "imdb-distilbert-lr5e-5"
+                        <pre><code>from transformers import DistilBertForSequenceClassification, Trainer, TrainingArguments
+model = DistilBertForSequenceClassification.from_pretrained('distilbert-base-uncased', num_labels=2)
+experiment_name = "imdb-distilbert-lr5e-5"
 
-                            training_args = TrainingArguments(
-                                output_dir="imdb-distilbert/",
-                                eval_strategy='steps',
-                                # get very fine-grained metrics (only needed for things in compute_metrics)
-                                # doing this so often is very slow and not recommended in practice
-                                # often would only do 1 eval per epoch
-                                eval_steps=10,
-                                per_device_train_batch_size=32,
-                                per_device_eval_batch_size=8,
-                                num_train_epochs=3,
-                                weight_decay=0.01,
-                                # match this to wherever tensorboard is looking
-                                logging_dir=f'logs/{experiment_name}/',
-                                # get very fine-grained loggging
-                                logging_steps=10,
-                                report_to='wandb',
-                                run_name=experiment_name,
-                                learning_rate=5e-5
-                            )
+training_args = TrainingArguments(
+    output_dir="imdb-distilbert/",
+    eval_strategy='steps',
+    # get very fine-grained metrics (only needed for things in compute_metrics)
+    # doing this so often is very slow and not recommended in practice
+    # often would only do 1 eval per epoch
+    eval_steps=10,
+    per_device_train_batch_size=32,
+    per_device_eval_batch_size=8,
+    num_train_epochs=3,
+    weight_decay=0.01,
+    # match this to wherever tensorboard is looking
+    logging_dir=f'logs/{experiment_name}/',
+    # get very fine-grained loggging
+    logging_steps=10,
+    report_to='wandb',
+    run_name=experiment_name,
+    learning_rate=5e-5
+)
 
-                            # Define the Trainer
-                            trainer = Trainer(
-                                model=model,
-                                args=training_args,
-                                train_dataset=tokenized_train,
-                                eval_dataset=tokenized_eval,
-                                data_collator=data_collator,
-                                compute_metrics=compute_metrics,
-                            )
+# Define the Trainer
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized_train,
+    eval_dataset=tokenized_eval,
+    data_collator=data_collator,
+    compute_metrics=compute_metrics,
+)
 
-                            # Train the model
-                            trainer.train()
-                        </code></pre>
+# Train the model
+trainer.train()</code></pre>
                         
                         <p>Once the train function gets triggered, it'll ask for the API key which you generated. Paste that.</p> 
 
