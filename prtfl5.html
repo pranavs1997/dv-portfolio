@@ -1,0 +1,256 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Portfolio 5</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.28.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.18.1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.25.0"></script>
+
+    <style media="screen">
+      /* Add space between Vega-Embed links  */
+      .vega-actions a {
+        margin-right: 5px;
+      }
+    </style>
+    <style>
+        ul.indented-list {
+          padding-left: 40px; /* Adjust as needed */
+        }
+        
+        ul.indented-list li {
+          margin-bottom: 5px; /* Optional: adds space between bullet points */
+        }
+    </style>
+  </head>
+  <body class="is-preload">
+    <!-- Wrapper -->
+        <div id="wrapper">
+
+            <!-- Header -->
+                <header id="header">
+                    <div class="inner">
+
+                        <!-- Logo -->
+                            <a href="index.html" class="logo">
+                                <span class="symbol"><img src="images/logo.svg" alt="" /></span><span class="title">Portfolio</span>
+                            </a>
+
+                        <!-- Nav -->
+                            <nav>
+                                <ul>
+                                    <li><a href="#menu">Menu</a></li>
+                                </ul>
+                            </nav>
+
+                    </div>
+                </header>
+
+            <!-- Menu -->
+                <nav id="menu">
+                    <h2>Menu</h2>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="prtfl1.html">Portfolio 1</a></li>
+                        <li><a href="prtfl2.html">Portfolio 2</a></li>
+                        <li><a href="prtfl3.html">Portfolio 3</a></li>
+                        <li><a href="prtfl4.html">Portfolio 4</a></li>
+                        <li><a href="prtfl5.html">Portfolio 5</a></li>
+                        <li><a href="proj.html">Project</a></li>
+                    </ul>
+                </nav>
+
+            <!-- Main -->
+                <div id="main">
+                    <div class="inner">
+                        <h1>Portfolio 5</h1>
+                        <h2>A step-by-step guide for WANDB integration with HuggingSpace</h2>
+                        <p>In this guide, we will walk through the steps of creating interactive plots using WANDB. This tutorial assumes that you already 
+                            have an account created in WANDB. If not <a href="https://wandb.ai/site" target="_blank">sign up here</a>, and create a token.
+                        </p>
+
+                        <h2>How to Login to Weights & Biases</h2>
+                        <p>Follow these steps to login and get your API token:</p>
+                        <ol>
+                            <li>Step 1: First navigate to <a href="https://wandb.ai/site" target="_blank">login page</a> and hit sign up</li>
+                            <img src="images/Picture1.png" alt="Step 1 Snapshot">
+                            <li>Step 2: After verifying your email, enter these details</li>
+                            <img src="images/Picture2.png" alt="Step 2 Snapshot">
+                            <li>Step 3: Now create an organization</li>
+                            <img src="images/Picture3.png" alt="Step 3 Snapshot">
+                            <li>Finally you can copy the API key</li>
+                            <img src="images/Picture4.png" alt="Step 4 Snapshot">
+                        </ol>
+
+
+                        <h3>Step 1: Install and Import Weights & Biases</h3>
+                        <p>Since you are using Google Colab, you can use a cell to run the pip install command directly:</p>
+                        <code>!pip install wandb</code>
+                        <p>After installation, you can import wandb in the next cell of your Colab notebook:</p>
+                        <code>import wandb</code>
+
+                        <h3>Step 2: Configure Environment Variables for Weights & Biases</h3>
+                        <p>Set the WANDB_PROJECT environment variable. This variable specifies the default project name where your experiments will be logged. Also set the WANDB_LOG_MODEL environment variable. This variable enables automatic logging of your models to wandb.</p>
+                        <pre><code>
+                            import os
+                            os.environ["WANDB_PROJECT"] = "exprmt"
+                            os.environ["WANDB_LOG_MODEL"] = "true"
+                        </code></pre>
+
+                        <h3>Step 3: Install datasets and accelerate</h3>
+                        <p>Run the following command to install the datasets and accelerate library</p>
+                        <pre><code>
+                            !pip install datasets
+                            !pip install accelerate>=0.21.0
+                        </code></pre>
+
+                        <h3>Step 4: Load the IMDB dataset</h3>
+                        <p>blah</p>
+                        <pre><code>
+                            from datasets import load_dataset
+                            datasets = load_dataset("imdb")
+                        </code></pre>
+
+                        <h3>Step 5: Create a small dataset</h3>
+                        <p>blah</p>
+                        <pre><code>
+                            small_train_dataset = datasets['train'].shuffle(seed=42).select(range(1000))
+                            small_eval_dataset = datasets['test'].shuffle(seed=42).select(range(100))
+                        </code></pre>
+                        
+                        <h3>Step 6: Load the DistilBert tokenizer and data collator for tokenizing</h3>
+                        <p>blah</p>
+                        <pre><code>
+                            from transformers import DistilBertTokenizer, DataCollatorWithPadding
+                            tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased')
+                            def tokenize_function(examples):
+                                return tokenizer(examples['text'], padding='max_length', truncation=True)
+                            tokenized_train = small_train_dataset.map(tokenize_function, batched=True)
+                            tokenized_eval = small_eval_dataset.map(tokenize_function, batched=True)
+                            data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
+                        </code></pre>
+
+                        <h3>Step 7: Create metrics</h3>
+                        <p>blah</p>
+                        <pre><code>
+                            # custom compute_metrics function
+                            from sklearn.metrics import precision_recall_fscore_support, accuracy_score
+
+                            # Define the compute_metrics function
+                            def compute_metrics(pred):
+                                labels = pred.label_ids
+                                preds = pred.predictions.argmax(-1)
+                                precision, recall, f1, _ = precision_recall_fscore_support(labels, preds, average='weighted')
+                                acc = accuracy_score(labels, preds)
+                                return {
+                                    'accuracy': acc,
+                                    'precision': precision,
+                                    'recall': recall,
+                                    'f1': f1,
+                                }
+                        </code></pre>
+
+                        <h3>Step 8: Load the model and the trainer</h3>
+                        <p>blah</p>
+                        <pre><code>
+                            from transformers import DistilBertForSequenceClassification, Trainer, TrainingArguments
+                            # Define the model and training arguments
+                            model = DistilBertForSequenceClassification.from_pretrained('distilbert-base-uncased', num_labels=2)
+                            experiment_name = "imdb-distilbert-lr5e-5"
+
+                            training_args = TrainingArguments(
+                                output_dir="imdb-distilbert/",
+                                eval_strategy='steps',
+                                # get very fine-grained metrics (only needed for things in compute_metrics)
+                                # doing this so often is very slow and not recommended in practice
+                                # often would only do 1 eval per epoch
+                                eval_steps=10,
+                                per_device_train_batch_size=32,
+                                per_device_eval_batch_size=8,
+                                num_train_epochs=3,
+                                weight_decay=0.01,
+                                # match this to wherever tensorboard is looking
+                                logging_dir=f'logs/{experiment_name}/',
+                                # get very fine-grained loggging
+                                logging_steps=10,
+                                report_to='wandb',
+                                run_name=experiment_name,
+                                learning_rate=5e-5
+                            )
+
+                            # Define the Trainer
+                            trainer = Trainer(
+                                model=model,
+                                args=training_args,
+                                train_dataset=tokenized_train,
+                                eval_dataset=tokenized_eval,
+                                data_collator=data_collator,
+                                compute_metrics=compute_metrics,
+                            )
+
+                            # Train the model
+                            trainer.train()
+                        </code></pre>
+                        
+                        <p>Once the train function gets triggered, it'll ask for the API key which you generated. Paste that.</p> 
+
+                        <iframe src="https://wandb.ai/viz_portfolio/exprmt/reports/imdb-distilbert-lr5e-5--Vmlldzo4MzM3Njg3" style="border:none;height:1024px;width:100%"></iframe>
+
+                    </div>
+                </div>
+
+            <!-- Footer -->
+                <footer id="footer">
+                    <div class="inner">
+                        <section>
+                            <h2>Get in touch</h2>
+                            <form method="post" action="#">
+                                <div class="fields">
+                                    <div class="field half">
+                                        <input type="text" name="name" id="name" placeholder="Name" />
+                                    </div>
+                                    <div class="field half">
+                                        <input type="email" name="email" id="email" placeholder="Email" />
+                                    </div>
+                                    <div class="field">
+                                        <textarea name="message" id="message" placeholder="Message"></textarea>
+                                    </div>
+                                </div>
+                                <ul class="actions">
+                                    <li><input type="submit" value="Send" class="primary" /></li>
+                                </ul>
+                            </form>
+                        </section>
+                        <section>
+                            <h2>Follow</h2>
+                            <ul class="icons">
+                                <li><a href="#" class="icon brands style2 fa-twitter"><span class="label">Twitter</span></a></li>
+                                <li><a href="#" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a></li>
+                                <li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
+                                <li><a href="#" class="icon brands style2 fa-dribbble"><span class="label">Dribbble</span></a></li>
+                                <li><a href="#" class="icon brands style2 fa-github"><span class="label">GitHub</span></a></li>
+                                <li><a href="#" class="icon brands style2 fa-500px"><span class="label">500px</span></a></li>
+                                <li><a href="#" class="icon solid style2 fa-phone"><span class="label">Phone</span></a></li>
+                                <li><a href="#" class="icon solid style2 fa-envelope"><span class="label">Email</span></a></li>
+                            </ul>
+                        </section>
+                        <ul class="copyright">
+                            <li>&copy; Untitled. All rights reserved</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+                        </ul>
+                    </div>
+                </footer>
+
+        </div>
+
+    <!-- Scripts -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/browser.min.js"></script>
+        <script src="assets/js/breakpoints.min.js"></script>
+        <script src="assets/js/util.js"></script>
+        <script src="assets/js/main.js"></script>
+
+</body>
+</html>
