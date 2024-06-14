@@ -9,10 +9,18 @@
     <script src="https://cdn.jsdelivr.net/npm/vega@5.28.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.18.1"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.25.0"></script>
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/default.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
+    <link rel="stylesheet" href="assets/css/code.css" />
+    <!-- Include Prism JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <style>
+        /* Custom style for code blocks */
+        pre {
+            background-color: #f8f8f8;
+            font-family: monospace;
+        }
+    </style>
+
     <style media="screen">
       /* Add space between Vega-Embed links  */
       .vega-actions a {
@@ -91,33 +99,34 @@
 
                         <h3>Step 1: Install and Import Weights & Biases</h3>
                         <p>Since you are using Google Colab, you can use a cell to run the pip install command directly:</p>
-                        <code>!pip install wandb</code><p></p>
+                        <pre><code class="language-python">!pip install wandb</code></pre><p></p>
                         <p>After installation, you can import wandb in the next cell of your Colab notebook:</p>
-                        <code>import wandb</code><p></p>
+                        <pre><code class="language-python">import wandb</code></pre>
+                        <p></p>
                         <h3>Step 2: Configure Environment Variables for Weights & Biases</h3>
                         <p>Set the WANDB_PROJECT environment variable. This variable specifies the default project name where your experiments will be logged. Also set the WANDB_LOG_MODEL environment variable. This variable enables automatic logging of your models to wandb.</p>
-                        <pre><code>import os
+                        <pre><code class="language-python">import os
 os.environ["WANDB_PROJECT"] = "exprmt"
 os.environ["WANDB_LOG_MODEL"] = "true"</code></pre>
 
                         <h3>Step 3: Install datasets and accelerate</h3>
                         <p>Run the following command to install the datasets and accelerate library</p>
-                        <pre><code>!pip install datasets
+                        <pre><code class="language-python">!pip install datasets
 !pip install accelerate>=0.21.0</code></pre>
 
                         <h3>Step 4: Load the IMDB dataset</h3>
                         <p>blah</p>
-                        <pre><code>from datasets import load_dataset
+                        <pre><code class="language-python">from datasets import load_dataset
 datasets = load_dataset("imdb")</code></pre>
 
                         <h3>Step 5: Create a small dataset</h3>
                         <p>blah</p>
-                        <pre><code>small_train_dataset = datasets['train'].shuffle(seed=42).select(range(1000))
+                        <pre><code class="language-python">small_train_dataset = datasets['train'].shuffle(seed=42).select(range(1000))
 small_eval_dataset = datasets['test'].shuffle(seed=42).select(range(100))</code></pre>
                         
                         <h3>Step 6: Load the DistilBert tokenizer and data collator for tokenizing</h3>
                         <p>blah</p>
-                        <pre><code>from transformers import DistilBertTokenizer, DataCollatorWithPadding
+                        <pre><code class="language-python">from transformers import DistilBertTokenizer, DataCollatorWithPadding
 tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased')
 def tokenize_function(examples):
     return tokenizer(examples['text'], padding='max_length', truncation=True)
@@ -127,7 +136,7 @@ data_collator = DataCollatorWithPadding(tokenizer=tokenizer)</code></pre>
 
                         <h3>Step 7: Create metrics</h3>
                         <p>blah</p>
-                        <pre><code>from sklearn.metrics import precision_recall_fscore_support, accuracy_score
+                        <pre><code class="language-python">from sklearn.metrics import precision_recall_fscore_support, accuracy_score
 def compute_metrics(pred):
     labels = pred.label_ids
     preds = pred.predictions.argmax(-1)
@@ -142,7 +151,7 @@ def compute_metrics(pred):
 
                         <h3>Step 8: Load the model and the trainer</h3>
                         <p>blah</p>
-                        <pre><code>from transformers import DistilBertForSequenceClassification, Trainer, TrainingArguments
+                        <pre><code class="language-python">from transformers import DistilBertForSequenceClassification, Trainer, TrainingArguments
 model = DistilBertForSequenceClassification.from_pretrained('distilbert-base-uncased', num_labels=2)
 experiment_name = "imdb-distilbert-lr5e-5"
 
