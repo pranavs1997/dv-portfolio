@@ -80,31 +80,34 @@
                         <h1>Portfolio 5</h1>
                         <h2>A step-by-step guide for WANDB integration with HuggingSpace</h2>
                         <p>In this guide, we will walk through the steps of creating interactive plots using WANDB. This tutorial assumes that you already 
-                            have an account created in WANDB. If not <a href="https://wandb.ai/site" target="_blank">sign up here</a>, and create a token.
+                            have an account created in WANDB. If not <a href="https://wandb.ai/site" target="_blank">sign up here</a>, and create a token. 
+                            Following are the steps to set up an accound in WANDB.
                         </p>
 
-                        <h2>How to Login to Weights & Biases</h2>
+                        <h2>Setting up you WANDB account</h2>
                         <p>Follow these steps to login and get your API token:</p>
-                        <ol>
-                            <li>Step 1: First navigate to <a href="https://wandb.ai/site" target="_blank">login page</a> and hit sign up</li>
-                            <img src="images/Picture1.png" alt="Step 1 Snapshot">
-                            <li>Step 2: After verifying your email, enter these details</li>
-                            <img src="images/Picture2.png" alt="Step 2 Snapshot">
-                            <li>Step 3: Now create an organization</li>
-                            <img src="images/Picture3.png" alt="Step 3 Snapshot">
-                            <li>Finally you can copy the API key</li>
-                            <img src="images/Picture4.png" alt="Step 4 Snapshot">
-                        </ol>
+                        
+                            <h3>Step 1: First navigate to <a href="https://wandb.ai/site" target="_blank">login page</a> and hit sign up</h3>
+                            <img class = "html3-img" src="images/Picture1.png" alt="Step 1 Snapshot"><p></p>
+                            <h3>Step 2: After verifying your email, enter these details</h3>
+                            <img class = "html3-img" src="images/Picture2.png" alt="Step 2 Snapshot"><p></p>
+                            <h3>Step 3: Now create an organization</h3>
+                            <img class = "html3-img" src="images/Picture3.png" alt="Step 3 Snapshot"><p></p>
+                            <h3>Step 4: Finally you can copy the API key. Keep it safe! We will need it later.</h3>
+                            <img class = "html3-img" src="images/Picture4.png" alt="Step 4 Snapshot"><p></p>
+                        
+                        <p>WIth a WANDM account in place let's move on to Google Colab</p>
 
-
+                        <h2>Google Colab</h2>
                         <h3>Step 1: Install and Import Weights & Biases</h3>
                         <p>Since you are using Google Colab, you can use a cell to run the pip install command directly:</p>
                         <pre><code class="language-python">!pip install wandb</code></pre><p></p>
                         <p>After installation, you can import wandb in the next cell of your Colab notebook:</p>
                         <pre><code class="language-python">import wandb</code></pre>
                         <p></p>
+                        
                         <h3>Step 2: Configure Environment Variables for Weights & Biases</h3>
-                        <p>Set the WANDB_PROJECT environment variable. This variable specifies the default project name where your experiments will be logged. Also set the WANDB_LOG_MODEL environment variable. This variable enables automatic logging of your models to wandb.</p>
+                        <p>WANDB_PROJECT and WANDB_LOG_MODEL are the environment variable. These variables will specify the default project name where your experiments will be logged and enables automatic logging of your models to wandb.</p>
                         <pre><code class="language-python">import os
 os.environ["WANDB_PROJECT"] = "exprmt"
 os.environ["WANDB_LOG_MODEL"] = "true"</code></pre>
@@ -115,17 +118,17 @@ os.environ["WANDB_LOG_MODEL"] = "true"</code></pre>
 !pip install accelerate>=0.21.0</code></pre>
 
                         <h3>Step 4: Load the IMDB dataset</h3>
-                        <p>blah</p>
+                        <p>In this step, you will load the IMDB dataset, which is a collection of movie reviews commonly used for sentiment analysis tasks. </p>
                         <pre><code class="language-python">from datasets import load_dataset
 datasets = load_dataset("imdb")</code></pre>
 
                         <h3>Step 5: Create a small dataset</h3>
-                        <p>blah</p>
+                        <p>In this step, you will create smaller subsets of the IMDB dataset for training and evaluation. This can be useful for quicker experimentation and debugging. We will randomly select 1,000 samples from the training set and 100 samples from the test set.</p>
                         <pre><code class="language-python">small_train_dataset = datasets['train'].shuffle(seed=42).select(range(1000))
 small_eval_dataset = datasets['test'].shuffle(seed=42).select(range(100))</code></pre>
                         
                         <h3>Step 6: Load the DistilBert tokenizer and data collator for tokenizing</h3>
-                        <p>blah</p>
+                        <p>In this step, you will load the DistilBert tokenizer, which is designed to convert text into numerical data that can be processed by the DistilBert model. Additionally, you will set up a data collator to handle padding during the tokenization process. This ensures that all input sequences are of equal length, which is important for efficient processing by the model.</p>
                         <pre><code class="language-python">from transformers import DistilBertTokenizer, DataCollatorWithPadding
 tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased')
 def tokenize_function(examples):
@@ -135,7 +138,7 @@ tokenized_eval = small_eval_dataset.map(tokenize_function, batched=True)
 data_collator = DataCollatorWithPadding(tokenizer=tokenizer)</code></pre>
 
                         <h3>Step 7: Create metrics</h3>
-                        <p>blah</p>
+                        <p>In this step, you will define a function to compute evaluation metrics for the model. Using common metrics like accuracy, precision, recall, and F1 score, you can effectively assess the performance of your model. The `compute_metrics` function will take the model predictions and ground truth labels as input, calculate these metrics, and return them in a dictionary format.</p>
                         <pre><code class="language-python">from sklearn.metrics import precision_recall_fscore_support, accuracy_score
 def compute_metrics(pred):
     labels = pred.label_ids
@@ -150,7 +153,8 @@ def compute_metrics(pred):
     }</code></pre>
 
                         <h3>Step 8: Load the model and the trainer</h3>
-                        <p>blah</p>
+                        <p>In this step, you will load the DistilBert model, specifically tailored for sequence classification tasks, and set up the training configurations. The `Trainer` class from the Hugging Face `transformers` library will be used to handle the training loop, evaluation, and logging. You will specify various training arguments such as batch size, number of epochs, and learning rate. Finally, the `Trainer` is defined with the model, datasets, data collator, and metrics, and then the model training is initiated.</p>
+                        <p>Additionally, you will integrate Weights & Biases (wandb) for experiment tracking and visualization. By setting `report_to='wandb'` and providing a `run_name`, you enable automatic logging of metrics, model checkpoints, and other relevant information to your wandb dashboard, allowing you to monitor and analyze your training process in real-time.</p>
                         <pre><code class="language-python">from transformers import DistilBertForSequenceClassification, Trainer, TrainingArguments
 model = DistilBertForSequenceClassification.from_pretrained('distilbert-base-uncased', num_labels=2)
 experiment_name = "imdb-distilbert-lr5e-5"
@@ -188,8 +192,10 @@ trainer = Trainer(
 # Train the model
 trainer.train()</code></pre>
                         
-                        <p>Once the train function gets triggered, it'll ask for the API key which you generated. Paste that.</p> 
-
+                        <p>Once the `train` function is triggered, the process will prompt you to enter the API key for Weights & Biases (wandb). Ensure you have generated this API key beforehand from your wandb account. Paste the API key into the prompt when asked.</p>
+                        <p>After the training completes, you will see a prompt asking you to view your run as shown in the below image (highlighted in green). This link directs you to the wandb dashboard where your visualizations and logged metrics are available. Click the link to access detailed insights and visualizations of your model's performance and training process.</p> 
+                        <img class = "html4-img" src="images/Picture5.png" alt="Output Snapshot"><p></p>
+                        <p>Once you have viewed and verified all the details on the run page, you can proceed to create a report. Here's an example of what a report might look like:</p>
                         <iframe src="https://wandb.ai/viz_portfolio/exprmt/reports/imdb-distilbert-lr5e-5--Vmlldzo4MzM3Njg3" style="border:none;height:1024px;width:100%"></iframe>
 
                     </div>
