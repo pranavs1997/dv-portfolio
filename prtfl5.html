@@ -171,16 +171,13 @@ training_args = TrainingArguments(
     per_device_eval_batch_size=8,
     num_train_epochs=3,
     weight_decay=0.01,
-    # match this to wherever tensorboard is looking
     logging_dir=f'logs/{experiment_name}/',
-    # get very fine-grained loggging
     logging_steps=10,
     report_to='wandb',
     run_name=experiment_name,
     learning_rate=5e-5
 )
 
-# Define the Trainer
 trainer = Trainer(
     model=model,
     args=training_args,
@@ -190,7 +187,6 @@ trainer = Trainer(
     compute_metrics=compute_metrics,
 )
 
-# Train the model
 trainer.train()</code></pre>
                         
                         <p>Once the `train` function is triggered, the process will prompt you to enter the API key for Weights & Biases (wandb). Ensure you have generated this API key beforehand from your wandb account. Paste the API key into the prompt when asked.</p>
