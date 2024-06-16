@@ -81,7 +81,7 @@
                         <h2>A step-by-step guide for Weights & Biases (WANDB) integration with HuggingFace &#x1F917;</h2>
                         <p>This guide will walk you through the steps of creating interactive plots using WANDB for you HuggingFace &#x1F917; model. This tutorial assumes that you already 
                             have an account created in WANDB. If not <a href="https://wandb.ai/site" target="_blank">sign up here</a>, and create a token.
-                            Following are the steps to set up an accound in WANDB.
+                            Following are the steps to set up an account in WANDB.
                         </p>
 
                         <h2>Setting up you WANDB account</h2>
@@ -96,7 +96,7 @@
                             <h3>Step 4: Finally you can copy the API key. Keep it safe! We will need it later.</h3>
                             <img class = "html3-img" src="images/Picture4.png" alt="Step 4 Snapshot"><p></p>
                         
-                        <p>WIth a WANDM account in place let's move on to Google Colab</p>
+                        <p>With a WANDM account in place let's move on to Google Colab!</p>
 
                         <h2>Coding in Google Colab</h2>
                         <p>Follow these steps to integrate your WANDB account in Colab and have an LLM running using HuggingFace  &#x1F917;. Make sure your 
@@ -166,9 +166,6 @@ experiment_name = "imdb-distilbert-lr5e-5"
 training_args = TrainingArguments(
     output_dir="imdb-distilbert/",
     eval_strategy='steps',
-    # get very fine-grained metrics (only needed for things in compute_metrics)
-    # doing this so often is very slow and not recommended in practice
-    # often would only do 1 eval per epoch
     eval_steps=10,
     per_device_train_batch_size=32,
     per_device_eval_batch_size=8,
